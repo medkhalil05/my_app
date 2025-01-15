@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <form class="login-form" id="loginForm">
+        <h2>Connexion</h2>
+        <input type="text" id="email" name="email" placeholder="Adresse email" required>
+        <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+        <button type="button" onclick="submitForm()">Se connecter</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    
+            fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur de connexion. Vérifiez vos informations.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Vérifier si le jeton JWT est présent
+                if (data.jwt) {
+                    console.log('Connexion réussie :', data);
+                    
+                    // Sauvegarder les informations utilisateur dans le stockage local
+                    localStorage.setItem('jwt', data.jwt);
+                    localStorage.setItem('userId', data.id);
+                    localStorage.setItem('userRole', data.role);
+    
+                    // Rediriger en fonction du rôle
+                    if (data.role === 'ADMINISTRATEUR') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else if (data.role === 'RESIDENT') {
+                        window.location.href = 'resident-dashboard.html';
+                    } else {
+                        alert('Rôle utilisateur inconnu.');
+                    }
+                } else {
+                    alert('Jeton JWT manquant dans la réponse.');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur :', error);
+                alert('Erreur lors de la connexion. Veuillez réessayer.');
+            });
+        }
+    </script>
+    
+</body>
+</html>

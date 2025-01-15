@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrateur</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+      <!-- Select2 CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+      <!-- Select2 JS -->
+      <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+      
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        /* Arrière-plan animé avec un dégradé dynamique en bleu */
+        .bg-animated {
+            background: linear-gradient(45deg, #3b82f6, #1e3a8a, #93c5fd);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+    
+        /* Animation du dégradé */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+    
+</head>
+
+<body class="text-white font-sans bg-gray-100">
+
+    <!-- Wrapper -->
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-blue-900 text-white p-5 flex flex-col justify-between shadow-xl transition-all ease-in-out duration-300 rounded-r-lg fixed top-0 left-0 h-screen z-50">
+            <div>
+                <h1 class="text-2xl font-bold mb-6 text-blue-400">Administrateur</h1>
+                <nav>
+                    <ul>
+                        <!-- Gestion des Chambres -->
+                        <li class="mb-4">
+                            <button id="toggleChambres" class="flex items-center justify-between p-3 w-full text-left rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105">
+                                <span>🛏️ Chambres</span>
+                                <span id="arrowChambres" class="transform rotate-0 transition-transform duration-300">▼</span>
+                            </button>
+                            <ul id="chambresSubMenu" class="ml-6 mt-2 hidden transition-all duration-300">
+                                <li><a href="#chambres-libres" class="block p-3 hover:bg-blue-600 transition-all duration-200">Chambres libres</a></li>
+                                <li><a href="openForm" class="block p-3 hover:bg-blue-600 transition-all duration-200">Chambres occupées</a></li>
+                                <!-- Bouton pour ouvrir le formulaire d'ajout de chambre -->
+                                <li><button id="openForm" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg ease-in-out transform hover:scale-105">Ajouter une Chambre</button></li>
+                            </ul>
+                        </li>
+                        <!-- Gestion des Résidents -->
+                        <li class="mb-4">
+                            <button id="toggleResidents" class="flex items-center justify-between p-3 w-full text-left rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105">
+                                <span>👤 Paiments</span>
+                                <span id="arrowResidents" class="transform rotate-0 transition-transform duration-300">▼</span>
+                            </button>
+                            <ul id="residentsSubMenu" class="ml-6 mt-2 hidden transition-all duration-300">
+                                <li><a href="#residents-actifs" class="block p-3 hover:bg-blue-600 transition-all duration-200">Paiments en retard</a></li>
+                                <li><a href="#residents-inactifs" class="block p-3 hover:bg-blue-600 transition-all duration-200"> paiments effectué</a></li>
+                          
+                            </ul>
+                        </li>      <li><a href="paimentEnattent.html" class="block p-3 hover:bg-blue-600 transition-all duration-200"> paiments en attente</a></li>
+                        <!-- Gestion des Requêtes -->
+                        <li class="mb-4">
+                            <button id="toggleRequetes" class="flex items-center justify-between p-3 w-full text-left rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out transform hover:scale-105">
+                                <span>🔧 Requêtes</span>
+                                <span id="arrowRequetes" class="transform rotate-0 transition-transform duration-300">▼</span>
+                            </button>
+                            <ul id="requetesSubMenu" class="ml-6 mt-2 hidden transition-all duration-300">
+                                <li><a href="#requêtes-en-attente" class="block p-3 hover:bg-blue-600 transition-all duration-200">Requêtes en attente</a></li>
+                                <li><a href="#requêtes-traitées" class="block p-3 hover:bg-blue-600 transition-all duration-200">Requêtes traitées</a></li>
+                            </ul>
+                        </li>
+                        <!-- Statistiques -->
+                        <li class="mb-4">
+                            <a href="#stats" class="block p-3 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">📊 Statistiques générales</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div>
+                <button class="w-full bg-red-700 p-3 rounded-lg hover:bg-red-800 transition duration-300 ease-in-out transform hover:scale-105">🔓 Déconnexion</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-64 p-8 bg-gray-100 text-gray-900 rounded-lg shadow-lg bg-animated"> <!-- Ajout du ml-64 pour espacer la sidebar -->
+            <!-- Barre de recherche -->
+            <div class="mb-8 flex items-center space-x-4">
+                <select id="searchType" class="px-6 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 transition duration-300 shadow-md hover:shadow-lg ease-in-out transform hover:scale-105">
+                    <option value="chambre">Chambre</option>
+                    <option value="resident">Résident</option>
+                </select>
+
+                <input type="text" id="searchInput" class="w-full sm:w-1/2 px-6 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800 transition duration-300 shadow-md hover:shadow-lg ease-in-out transform hover:scale-105" placeholder="Rechercher une chambre ou un résident...">
+                <button class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg ease-in-out transform hover:scale-105">Rechercher</button>
+            </div>
+
+            <!-- Section des chambres -->
+            <section id="chambres" class="mb-12" data-aos="fade-up">
+                <div class="bg-white p-6 rounded-lg shadow-xl border-t-4 border-blue-600">
+                    <h2 class="text-xl font-semibold mb-4">Les Chambres</h2>
+                    
+                    <table class="w-full table-auto border-collapse">
+                        <thead>
+                            <tr class="bg-blue-700 text-white">
+                                <th class="px-6 py-3 text-left">Numéro</th>
+                                <th class="px-6 py-3 text-left">Taille</th>
+                                <th class="px-6 py-3 text-left">Equipements</th>
+                                <th class="px-6 py-3 text-left">État</th>
+                                <th class="px-6 py-3 text-left">Prix</th>
+                                <th class="px-6 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Les lignes seront insérées ici par le script -->
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </section>
+            <!-- Modale d'attribution -->
+<div id="assignModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded-lg w-1/3">
+        <h2 class="text-xl font-semibold text-blue-400 mb-4">Attribuer une Chambre</h2>
+        <form onsubmit="assignChambre(event)">
+            <input type="hidden" id="chambreId">
+            <div class="mb-4">
+                <label for="residentEmail" class="text-gray-900">Email du résident :</label>
+                <input type="email" id="residentEmail" class="w-full px-4 py-2 mt-2 bg-gray-200 text-gray-900 rounded-lg" required>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" onclick="closeAssignForm()" class="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-700">Annuler</button>
+                <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-700">Attribuer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+            <!-- Section des résidents -->
+            <section id="residents" class="mb-12" data-aos="fade-up">
+                <div class="bg-white p-6 rounded-lg shadow-xl border-t-4 border-blue-600">
+                    <h2 class="text-xl font-semibold mb-4">Les Résidents</h2>
+                    <table class="w-full table-auto border-collapse">
+                        <thead>
+                            <tr class="bg-blue-700 text-white">
+                                <th class="px-6 py-3 text-left">Nom</th>
+                                <th class="px-6 py-3 text-left">Prénom</th>
+                                <th class="px-6 py-3 text-left">email</th>
+                                <th class="px-6 py-3 text-left">numéro chambre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+    <!-- Formulaire d'ajout de chambre (modale) -->
+<div id="modalForm" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded-lg w-1/2">
+        <h2 class="text-xl font-semibold text-blue-400 mb-4">Ajouter une Chambre</h2>
+        <form id="addChambreForm">
+            <div class="mb-4">
+                <label for="numChambre" class="text-gray-900">Numéro de chambre :</label>
+                <input type="text" id="numChambre" name="numChambre" class="w-full px-4 py-2 mt-2 bg-gray-200 text-gray-900 rounded-lg" required>
+            </div>
+            <div class="mb-4">
+                <label for="tailleChambre" class="text-gray-900">Taille :</label>
+                <input type="text" id="tailleChambre" name="tailleChambre" class="w-full px-4 py-2 mt-2 bg-gray-200 text-gray-900 rounded-lg" required>
+            </div>
+            <div class="mb-4">
+                <label for="equipements" class="text-gray-900">Équipements :</label>
+                <input type="text" id="equipements" name="equipements" class="w-full px-4 py-2 mt-2 bg-gray-200 text-gray-900 rounded-lg" required>
+            </div>
+            <div class="mb-4">
+                <label for="prixChambre" class="text-gray-900">Prix :</label>
+                <input type="text" id="prixChambre" name="prixChambre" class="w-full px-4 py-2 mt-2 bg-gray-200 text-gray-900 rounded-lg" required>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" id="closeForm" class="bg-red-600 px-6 py-2 rounded-lg text-white hover:bg-red-700 transition duration-300">Annuler</button>
+                <button type="submit" class="bg-blue-600 px-6 py-2 rounded-lg text-white hover:bg-blue-700 transition duration-300">Ajouter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="script-admin.js"></script>
+  
+
+</body>
+</html>

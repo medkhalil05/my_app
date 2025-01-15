@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiements en attente</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .btn-refresh {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-refresh:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Paiements en attente</h1>
+    <button class="btn-refresh" onclick="fetchPaiements()">Rafraîchir</button>
+    <table id="paiements-table">
+        <thead>
+            <tr>
+                <th>Nom du Résident</th>
+                <th>Email</th>
+                <th>Date de Paiement</th>
+                <th>Montant</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" class="text-center">Aucune donnée disponible</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+    function fetchPaiements() {
+        fetch('http://localhost:8080/api/paiments/enAttente', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des paiements en attente : ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const paiementsTableBody = document.querySelector('#paiements-table tbody');
+            paiementsTableBody.innerHTML = ''; // Effacer les anciennes données
+    
+            if (data && Array.isArray(data) && data.length > 0) {
+                data.forEach(paiement => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${paiement.nomResident}</td>
+                        <td>${paiement.email}</td>
+                        <td>${new Date(paiement.datePaiement).toLocaleDateString()}</td>
+                        <td>${paiement.montant} MAD</td>
+                        <td>${paiement.status}</td>
+                    `;
+                    paiementsTableBody.appendChild(row);
+                });
+            } else {
+                paiementsTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Aucun paiement en attente</td></tr>';
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des paiements en attente :', error);
+        });
+    }
+    </script>
+</body>
+</html>

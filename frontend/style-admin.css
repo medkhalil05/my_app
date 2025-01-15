@@ -1,0 +1,19 @@
+/* Arrière-plan animé avec un dégradé dynamique */
+.bg-animated {
+    background: linear-gradient(45deg, #37ad45, #158415, #a2f197);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
+}
+
+/* Animation du dégradé */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Résident</title>
+    <link rel="stylesheet" href="style-resident.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Résident</h2>
+        <ul>
+            <li><a href="#profil">Profil</a></li>
+            <li><a href="#paiements">Paiements</a></li>
+            <li><a href="#incident">Signaler un incident</a></li>
+            <li><a href="#maintenance">Requêtes de maintenance</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header>
+            <h1>Bienvenue, [Nom du Résident]</h1>
+        </header>
+
+        <!-- Section : Profil -->
+        <section id="profil">
+            <h2>Profil</h2>
+            <p>Nom : [Nom du résident]</p>
+            <p>Email : [Email]</p>
+            <p>Chambre attribuée : [Numéro de chambre]</p>
+            <button>Modifier mes informations</button>
+        </section>
+
+        <!-- Section : Paiements -->
+        <section id="paiements">
+            <h2>Suivi des paiements</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Reçu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Données dynamiques -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section : Incident -->
+        <section id="incident">
+            <h2>Signaler un incident</h2>
+            <form>
+                <label for="type">Type d'incident :</label>
+                <select id="type">
+                    <option value="plomberie">Plomberie</option>
+                    <option value="électricité">Électricité</option>
+                    <option value="autre">Autre</option>
+                </select>
+                <label for="description">Description :</label>
+                <textarea id="description" rows="4"></textarea>
+                <button type="submit">Envoyer</button>
+            </form>
+        </section>
+
+        <!-- Section : Maintenance -->
+        <section id="maintenance">
+            <h2>Suivi des requêtes de maintenance</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Données dynamiques -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
